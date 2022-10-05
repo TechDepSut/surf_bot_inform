@@ -41,8 +41,8 @@ async def get_level(name):
     for i in range(len(levels)):
         if found < int(levels[i]):
             current_lvl = i + 1
-            current_score = (found % int(levels[i - 1]))*7
-            max_score_on_level = (int(levels[i]) - int(levels[i - 1]))*7
+            current_score = (found % int(levels[i - 1])) * 7
+            max_score_on_level = (int(levels[i]) - int(levels[i - 1])) * 7
             break
 
     procent = current_score / max_score_on_level

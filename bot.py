@@ -10,7 +10,7 @@ bot = Bot(token=os.environ["TOKEN"])
 dp = Dispatcher(bot)
 
 names = {
-    "orloffdd": "Храпунов Никита",
+    "orloffdd": "Орлов Даниил",
     "kill_your_soul": "Платонов Дмитрий",
     "klafuty": "Клешкова Алисия",
 }
