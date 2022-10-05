@@ -22,7 +22,8 @@ async def command_start(message: types.Message):
 async def stat_send(message: types.Message):
     msg = await message.answer("Запрос обрабатывается, подожди...")
     stat = await get_stat(names.get(message.from_user.username))
-    await msg.edit_text(stat)
+    await msg.edit_text(stat[0])
+    await message.answer(stat[1])
 
 
 if __name__ == "__main__":
