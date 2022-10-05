@@ -1,6 +1,6 @@
 import os
-from utils.sheet_connect import get_stat
-from utils.sheet_connect import get_level
+from utils.sheet_connect import *
+from buttons.but import keybrd
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
@@ -19,19 +19,19 @@ names = {
 @dp.message_handler(commands=["start"])
 async def command_start(message: types.Message):
     await message.answer(
-        'Привет! Я - бот, призванный сделать процесс твоего поиска интереснее и веселее. Давай начнем! Напиши мне "Статистика"'
+        "Привет! Я - бот, призванный сделать процесс твоего поиска интереснее и веселее. Давай начнем!",
+        reply_markup=keybrd,
     )
 
 
-@dp.message_handler(text="Статистика")
+@dp.message_handler(text="📊Статистика")
 async def stat_send(message: types.Message):
     msg = await message.answer("Запрос обрабатывается, подожди...")
     stat = await get_stat(names.get(message.from_user.username), "stat")
     await msg.edit_text(stat)
-    # await message.answer(stat[1])
 
 
-@dp.message_handler(text="Посмотреть уровень")
+@dp.message_handler(text="🏆Уровень")
 async def lvl_send(message: types.Message):
     msg = await message.answer("Запрос обрабатывается, подожди...")
     lvl = await get_level(names.get(message.from_user.username))
