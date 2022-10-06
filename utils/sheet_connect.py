@@ -1,9 +1,7 @@
-from tkinter.font import names
 from . import sh
-from .person import Person
 
 
-async def object_create(name):
+async def get_stat(name):
 
     current_lvl = 0
     current_score = 0
@@ -34,51 +32,52 @@ async def object_create(name):
     return person_statistic
 
 
-async def get_statistic(name, type):
+async def print_stat(person):
 
-    wks = sh.worksheet_by_title("Лист6")
-    stat = wks.get_all_records()
+    stat = (
+        "📈Твоя статистика:\n━━━━━━━━━━━━━━\n"
+        + "Имя: "
+        + person.name
+        + "\nКол-во: "
+        + person.amount
+        + "\nНайдено: "
+        + person.founded
+        + "\nОсталось: "
+        + person.left
+        + "\n━━━━━━━━━━━━━━"
+    )
 
-    for i in stat:
-        if i["Имя"] == name:
-            person_statistic = i
-            break
-
-    if type == "stat":
-        strings = ["Твоя статистика", "━━━━━━━━━━━━━━"]
-        for key, item in person_statistic.items():
-            strings.append("{}: {}".format(key.capitalize(), item))
-        strings.append("━━━━━━━━━━━━━━")
-        phrase = "\n".join(strings)
-
-        return phrase
-
-    else:
-
-        return person_statistic
+    return stat
 
 
-async def get_level(name):
+async def print_lvl(person):
 
-    person_statistic = await get_statistic(name=name, type="lvl")
+    bar = await get_progressBar(person.current_score, person.max_score_on_level)
 
-    current_lvl = 0
-    current_score = 0
-    max_score_on_level = 0
+    lvl = (
+        "🏆Твой уровень:\n━━━━━━━━━━━━━━\n"
+        + "Уровень: "
+        + person.current_level
+        + "\nКоличество опыта: "
+        + person.current_score
+        + "\nДо следующего уровня: "
+        + str(int(person.max_score_on_level) - int(person.current_score))
+        + "\n\n"
+        + bar[0]
+        + "\n"
+        + bar[1]
+        + "%"
+        + "\n\n━━━━━━━━━━━━━━"
+    )
+
+    return lvl
+
+
+async def get_progressBar(current_score, max_score_on_level):
+
     progressBar = ""
 
-    lvl_sh = sh.worksheet_by_title("lvl")
-    levels = lvl_sh.get_col(1, include_tailing_empty=False)
-
-    found = int(person_statistic["Нашел"])
-    for i in range(len(levels)):
-        if found < int(levels[i]):
-            current_lvl = i + 1
-            current_score = (found % int(levels[i - 1])) * 7
-            max_score_on_level = (int(levels[i]) - int(levels[i - 1])) * 7
-            break
-
-    procent = current_score / max_score_on_level
+    procent = float(current_score) / float(max_score_on_level)
     part = round(15 * round(procent, 2))
 
     for i in range(15):
@@ -87,18 +86,4 @@ async def get_level(name):
         else:
             progressBar += "⎯"
 
-    lvl_info = (
-        "Твой уровень\n━━━━━━━━━━━━━━\nУровень: "
-        + str(current_lvl)
-        + "\nКоличество опыта: "
-        + str(current_score)
-        + "\nДо следующего уровня: "
-        + str(max_score_on_level - current_score)
-        + "\n\n"
-        + progressBar
-        + "\n"
-        + str(round(procent, 4) * 100)
-        + "%\n"
-        + "\n━━━━━━━━━━━━━━"
-    )
-    return lvl_info
+    return [progressBar, str(round(procent * 100, 2))]

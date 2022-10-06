@@ -9,6 +9,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from utils.person import Person
 
+
 storage = MemoryStorage()
 
 bot = Bot(token=os.environ["TOKEN"])
@@ -26,44 +27,55 @@ async def command_start(message: types.Message, state: FSMContext):
 
     name = names.get(message.from_user.username)
     await message.answer(
-        "Привет! Я - бот, призванный сделать процесс твоего поиска интереснее и веселее. Давай начнем!",
+        "Привет! Я - бот, призванный сделать процесс твоего поиска интереснее и веселее. Давай начнем! Учти, что бот обновляет базу каждые 5 минут😉",
         reply_markup=keybrd,
     )
+
+    stat = await get_stat(name)
+    async with state.proxy() as data:
+        data["person"] = Person(
+            stat[0], stat[1], stat[2], stat[3], stat[4], stat[5], stat[6]
+        )
 
     global stop_polling_sheet
     stop_polling_sheet = asyncio.Event()
     while True:
         try:
-            await asyncio.wait_for(stop_polling_sheet.wait(), timeout=10)
+            await asyncio.wait_for(stop_polling_sheet.wait(), timeout=300)
         except asyncio.TimeoutError:
             try:
-                stat = await object_create(name)
+                stat = await get_stat(name)
                 async with state.proxy() as data:
                     data["person"] = Person(
                         stat[0], stat[1], stat[2], stat[3], stat[4], stat[5], stat[6]
                     )
             except:
-                await message.answer("not working")
+                await print("not working")
 
 
-@dp.message_handler(text="test")
-async def test(message: types.Message, state: FSMContext):
+@dp.message_handler(text="📈Статистика")
+async def stat_send(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        await message.answer(data["person"].get_founded())
-
-
-@dp.message_handler(text="📊Статистика")
-async def stat_send(message: types.Message):
-    msg = await message.answer("Запрос обрабатывается, подожди...")
-    stat = await get_statistic(names.get(message.from_user.username), "stat")
-    await msg.edit_text(stat)
+        stat = await print_stat(data["person"])
+        await message.answer(stat)
 
 
 @dp.message_handler(text="🏆Уровень")
-async def lvl_send(message: types.Message):
-    msg = await message.answer("Запрос обрабатывается, подожди...")
-    lvl = await get_level(names.get(message.from_user.username))
-    await msg.edit_text(lvl)
+async def lvl_send(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        lvl = await print_lvl(data["person"])
+        await message.answer(lvl)
+
+
+"""@dp.message_handler(text='test')
+async def send_progressBar(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        progressBar = await get_progressBar(data['person'], 1)
+        msg = await message.answer(progressBar)
+        for i in range(2, 16):
+            await asyncio.sleep(0.2)
+            progressBar = await get_progressBar(data['person'], i)
+            await msg.edit_text(progressBar)"""
 
 
 if __name__ == "__main__":
