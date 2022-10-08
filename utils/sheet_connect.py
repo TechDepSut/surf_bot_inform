@@ -87,3 +87,41 @@ async def get_progressBar(current_score, max_score_on_level):
             progressBar += "⎯"
 
     return [progressBar, str(round(procent * 100, 2))]
+
+
+async def get_enemy(person):
+
+    wks = sh.worksheet_by_title("Лист6")
+    founded = wks.get_col(3, include_tailing_empty=False)
+
+    founded.pop(0)
+    founded = list(map(int, founded))
+
+    print(founded)
+
+    min_p = min(founded, key=lambda x: abs(x-int(person.founded)))
+    max_p = max(founded, key=lambda x: abs(x-int(person.founded)))
+
+    print(min_p)
+
+    if min_p != person.founded:
+        for i in range(len(founded)):
+            if founded[i] == min_p:
+                min_person = wks.get_row(i + 2, include_tailing_empty=False)
+
+    print(min_person)
+
+    min_print = (
+        + "Имя: "
+        + min_person[0]
+        + "\nКол-во: "
+        + min_person[1]
+        + "\nНайдено: "
+        + min_person[2]
+        + "\nОсталось: "
+        + min_person[3]
+        + "\n━━━━━━━━━━━━━━"
+    )
+
+    return min_print
+

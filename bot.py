@@ -66,16 +66,12 @@ async def lvl_send(message: types.Message, state: FSMContext):
         lvl = await print_lvl(data["person"])
         await message.answer(lvl)
 
-
-"""@dp.message_handler(text='test')
-async def send_progressBar(message: types.Message, state: FSMContext):
+@dp.message_handler(text='Соседние результаты')
+async def send_enemy(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        progressBar = await get_progressBar(data['person'], 1)
-        msg = await message.answer(progressBar)
-        for i in range(2, 16):
-            await asyncio.sleep(0.2)
-            progressBar = await get_progressBar(data['person'], i)
-            await msg.edit_text(progressBar)"""
+        enemy = await get_enemy(data['person'])
+        await message.answer(enemy)
+
 
 
 if __name__ == "__main__":
