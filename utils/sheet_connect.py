@@ -97,31 +97,31 @@ async def get_enemy(person):
     founded.pop(0)
     founded = list(map(int, founded))
 
-    print(founded)
+    min_index = -1
+    min_f = int(person.founded)
 
-    min_p = min(founded, key=lambda x: abs(x-int(person.founded)))
-    max_p = max(founded, key=lambda x: abs(x-int(person.founded)))
+    for i in range(len(founded)):
+        if min_f > founded[i]:
+            min_index = i
+            min_f = founded[i]
 
-    print(min_p)
+    min_person = []
+    if min_index != -1:
+        
+        min_person = wks.get_row(min_index + 2, include_tailing_empty=False)
+        min_print = (
+            "Ближайший серфер с меньшим количеством людей:\n━━━━━━━━━━━━━━\n"
+            + "Имя: "
+            + min_person[0]
+            + "\nКол-во: "
+            + min_person[1]
+            + "\nНайдено: "
+            + min_person[2]
+            + "\nОсталось: "
+            + min_person[3]
+            + "\n━━━━━━━━━━━━━━"
+        )
 
-    if min_p != person.founded:
-        for i in range(len(founded)):
-            if founded[i] == min_p:
-                min_person = wks.get_row(i + 2, include_tailing_empty=False)
-
-    print(min_person)
-
-    min_print = (
-        + "Имя: "
-        + min_person[0]
-        + "\nКол-во: "
-        + min_person[1]
-        + "\nНайдено: "
-        + min_person[2]
-        + "\nОсталось: "
-        + min_person[3]
-        + "\n━━━━━━━━━━━━━━"
-    )
-
-    return min_print
-
+        return min_print
+    else:
+        return ""

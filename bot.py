@@ -66,12 +66,15 @@ async def lvl_send(message: types.Message, state: FSMContext):
         lvl = await print_lvl(data["person"])
         await message.answer(lvl)
 
-@dp.message_handler(text='Соседние результаты')
+
+@dp.message_handler(text="Соседние результаты")
 async def send_enemy(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        enemy = await get_enemy(data['person'])
-        await message.answer(enemy)
-
+        enemy = await get_enemy(data["person"])
+        try:
+            await message.answer(enemy)
+        except:
+            pass
 
 
 if __name__ == "__main__":
