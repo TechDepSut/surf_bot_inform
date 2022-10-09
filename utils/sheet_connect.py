@@ -1,4 +1,5 @@
 from . import sh
+import time
 
 
 async def get_stat(name):
@@ -97,18 +98,27 @@ async def get_enemy(person):
     founded.pop(0)
     founded = list(map(int, founded))
 
-    min_index = -1
-    min_f = int(person.founded)
+    min_f = -1
+    max_f = -1
 
-    for i in range(len(founded)):
-        if min_f > founded[i]:
-            min_index = i
-            min_f = founded[i]
+    founded_sort = sorted(founded)
+    for i in range(len(founded_sort)):
+        if founded_sort[i] == int(person.founded):
 
-    min_person = []
-    if min_index != -1:
-        
-        min_person = wks.get_row(min_index + 2, include_tailing_empty=False)
+            if i != 0:
+                min_f = founded_sort[i - 1]
+
+            if i != len(founded_sort) - 1:
+                max_f = founded_sort[i + 1]
+
+    min_print = ""
+    max_print = ""
+
+    if min_f != -1:
+        for i in range(len(founded)):
+            if min_f == founded[i]:
+                min_person = wks.get_row(i + 2, include_tailing_empty=False)
+
         min_print = (
             "Ближайший серфер с меньшим количеством людей:\n━━━━━━━━━━━━━━\n"
             + "Имя: "
@@ -122,6 +132,22 @@ async def get_enemy(person):
             + "\n━━━━━━━━━━━━━━"
         )
 
-        return min_print
-    else:
-        return ""
+    if max_f != -1:
+        for i in range(len(founded)):
+            if max_f == founded[i]:
+                max_person = wks.get_row(i + 2, include_tailing_empty=False)
+
+        max_print = (
+            "Ближайший серфер с большим количеством людей:\n━━━━━━━━━━━━━━\n"
+            + "Имя: "
+            + max_person[0]
+            + "\nКол-во: "
+            + max_person[1]
+            + "\nНайдено: "
+            + max_person[2]
+            + "\nОсталось: "
+            + max_person[3]
+            + "\n━━━━━━━━━━━━━━"
+        )
+
+    return [min_print, max_print]

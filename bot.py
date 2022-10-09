@@ -72,7 +72,12 @@ async def send_enemy(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         enemy = await get_enemy(data["person"])
         try:
-            await message.answer(enemy)
+            await message.answer(enemy[0])
+        except:
+            pass
+
+        try:
+            await message.answer(enemy[1])
         except:
             pass
 
