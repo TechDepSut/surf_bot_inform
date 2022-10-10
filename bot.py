@@ -1,6 +1,7 @@
 import os
 import asyncio
 from utils.sheet_connect import *
+from utils.printFunc import *
 from buttons.but import keybrd
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
@@ -37,6 +38,15 @@ async def command_start(message: types.Message, state: FSMContext):
             stat[0], stat[1], stat[2], stat[3], stat[4], stat[5], stat[6]
         )
 
+        enemies = await get_enemy(data["person"])
+        data["min_enemy"] = Person(
+            enemies[0][0], enemies[0][1], enemies[0][2], enemies[0][3], "", "", ""
+        )
+
+        data["max_enemy"] = Person(
+            enemies[1][0], enemies[1][1], enemies[1][2], enemies[1][3], "", "", ""
+        )
+
     global stop_polling_sheet
     stop_polling_sheet = asyncio.Event()
     while True:
@@ -49,8 +59,30 @@ async def command_start(message: types.Message, state: FSMContext):
                     data["person"] = Person(
                         stat[0], stat[1], stat[2], stat[3], stat[4], stat[5], stat[6]
                     )
+
+                    enemies = await get_enemy(data["person"])
+                    data["min_enemy"] = Person(
+                        enemies[0][0],
+                        enemies[0][1],
+                        enemies[0][2],
+                        enemies[0][3],
+                        "",
+                        "",
+                        "",
+                    )
+
+                    data["max_enemy"] = Person(
+                        enemies[1][0],
+                        enemies[1][1],
+                        enemies[1][2],
+                        enemies[1][3],
+                        "",
+                        "",
+                        "",
+                    )
+
             except:
-                await print("not working")
+                print("not working")
 
 
 @dp.message_handler(text="📈Статистика")
@@ -70,7 +102,7 @@ async def lvl_send(message: types.Message, state: FSMContext):
 @dp.message_handler(text="Соседние результаты")
 async def send_enemy(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        enemy = await get_enemy(data["person"])
+        enemy = await enemies_print(data["min_enemy"], data["max_enemy"])
         try:
             await message.answer(enemy[0])
         except:
