@@ -22,10 +22,13 @@ names = {
     "klafuty": "Клешкова Алисия",
 }
 
+usersid = []
+
 
 @dp.message_handler(commands=["start"])
 async def command_start(message: types.Message, state: FSMContext):
 
+    usersid.append(message.from_user.id)
     name = names.get(message.from_user.username)
     await message.answer(
         "Привет! Я - бот, призванный сделать процесс твоего поиска интереснее и веселее. Давай начнем! Учти, что бот обновляет базу каждые 5 минут😉",
@@ -112,6 +115,12 @@ async def send_enemy(message: types.Message, state: FSMContext):
             await message.answer(enemy[1])
         except:
             pass
+
+@dp.message_handler(commands=['sendall'])
+async def sendall(message: types.Message):
+    if message.from_user.username == 'orloffdd':
+        for i in usersid:
+            await bot.send_message(i, "Бот скоро отключится для обновления. Когда захочешь им воспользоваться, снова напиши команду /start")
 
 
 if __name__ == "__main__":
