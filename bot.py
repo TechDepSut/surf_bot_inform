@@ -85,21 +85,21 @@ async def command_start(message: types.Message, state: FSMContext):
                 print("not working")
 
 
-@dp.message_handler(text="📈Статистика")
+@dp.message_handler(text="📈 Статистика")
 async def stat_send(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         stat = await print_stat(data["person"])
         await message.answer(stat)
 
 
-@dp.message_handler(text="🏆Уровень")
+@dp.message_handler(text="🏆 Уровень")
 async def lvl_send(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         lvl = await print_lvl(data["person"])
         await message.answer(lvl)
 
 
-@dp.message_handler(text="🤝Соседние результаты")
+@dp.message_handler(text="🤝 Соседние результаты")
 async def send_enemy(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         enemy = await enemies_print(data["min_enemy"], data["max_enemy"])
