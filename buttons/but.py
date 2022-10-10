@@ -2,7 +2,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemo
 
 b1 = KeyboardButton("📈Статистика")
 b2 = KeyboardButton("🏆Уровень")
-b3 = KeyboardButton("Соседние результаты")
+b3 = KeyboardButton("🤝Соседние результаты")
 
 keybrd = ReplyKeyboardMarkup(resize_keyboard=True)
 

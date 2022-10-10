@@ -99,7 +99,7 @@ async def lvl_send(message: types.Message, state: FSMContext):
         await message.answer(lvl)
 
 
-@dp.message_handler(text="Соседние результаты")
+@dp.message_handler(text="🤝Соседние результаты")
 async def send_enemy(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         enemy = await enemies_print(data["min_enemy"], data["max_enemy"])
