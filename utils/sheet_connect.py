@@ -79,13 +79,13 @@ async def get_progressBar(current_score, max_score_on_level):
     progressBar = ""
 
     procent = float(current_score) / float(max_score_on_level)
-    part = round(15 * round(procent, 2))
+    part = round(20 * round(procent, 2))
 
-    for i in range(15):
+    for i in range(20):
         if i < part:
-            progressBar += "█"
+            progressBar += "■"
         else:
-            progressBar += "⎯"
+            progressBar += "□"
 
     return [progressBar, str(round(procent * 100, 2))]
 
