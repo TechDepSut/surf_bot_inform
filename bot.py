@@ -20,6 +20,8 @@ names = {
     "orloffdd": "Орлов Даниил",
     "kill_your_soul": "Платонов Дмитрий",
     "klafuty": "Клешкова Алисия",
+    "svyrat": "Тарасова Арина",
+    "dibrovals": "Леся Диброва"
 }
 
 usersid = []
@@ -116,11 +118,15 @@ async def send_enemy(message: types.Message, state: FSMContext):
         except:
             pass
 
-@dp.message_handler(commands=['sendall'])
+
+@dp.message_handler(commands=["sendall"])
 async def sendall(message: types.Message):
-    if message.from_user.username == 'orloffdd':
+    if message.from_user.username == "orloffdd":
         for i in usersid:
-            await bot.send_message(i, "Бот скоро отключится для обновления. Когда захочешь им воспользоваться, снова напиши команду /start")
+            await bot.send_message(
+                i,
+                "Бот скоро отключится для обновления. Когда захочешь им воспользоваться, снова напиши команду /start",
+            )
 
 
 if __name__ == "__main__":
