@@ -21,7 +21,11 @@ names = {
     "kill_your_soul": "Платонов Дмитрий",
     "klafuty": "Клешкова Алисия",
     "svyrat": "Тарасова Арина",
-    "dibrovals": "Леся Диброва"
+    "dibrovals": "Леся Диброва",
+    "springhuman": "Смирнова Анастасия",
+    "konstraktism": "Храпунов Никита",
+    "tmat0rip0ula": "Матрипула Татьяна",
+    "nadyhahaha": "Тананыкина Надежда"
 }
 
 usersid = []
